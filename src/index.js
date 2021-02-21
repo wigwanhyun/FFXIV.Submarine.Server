@@ -45,7 +45,7 @@ app.all('/*', function(req, res, next) {
 
 app.get("/getList", (req, res) => {
     var database   = firebase.database();
-    database.ref('/').once('value')
+    database.ref('/').orderByChild("Name").once('value')
     .then(function(snapshot) {
         var sJson = JSON.stringify(snapshot.val());
         var oJson = JSON.parse(sJson);
