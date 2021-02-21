@@ -55,7 +55,7 @@ app.get("/getList", (req, res) => {
         var dataSet = [];
         oKeys.forEach(element => {
             let oData = oJson[element];
-            dataSet.push([oData.Name, oData.Tear2Reward, oData.Tear3Reward]);
+            dataSet.push([oData.Name, oData.Tear1Reward, oData.Tear2Reward, oData.Tear3Reward]);
         })
         res.writeHead(200, {'Content-Type':'application/json'});
         res.end(JSON.stringify(dataSet));
