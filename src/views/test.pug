@@ -1,0 +1,45 @@
+
+doctype html
+html(lang="kr")
+    head
+        title Node.js in the Cloud
+            
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
+        script(src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js")
+
+        script(src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js")
+
+        script(src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js")
+        script(src="https://www.gstatic.com/firebasejs/8.2.6/firebase-firestore.js")
+        script(src="https://www.gstatic.com/firebasejs/8.2.6/firebase-database.js")
+    body
+        script.
+            var firebaseConfig = {
+                apiKey: "AIzaSyDBl3p8u2LHEjcxlyPIEFqaIcGhgJN3-E8",
+                authDomain: "ffxiv-submarin.firebaseapp.com",
+                projectId: "ffxiv-submarin",
+                storageBucket: "ffxiv-submarin.appspot.com",
+                messagingSenderId: "858250318096",
+                appId: "1:858250318096:web:88a50a8325f459ba901595",
+                measurementId: "G-ME06WV8RSY"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            var database   = firebase.database();
+            var newPostKey = database.ref().child('posts').push().key;
+            
+            var postData = {
+                brdno: newPostKey,
+                brdwriter:"홍길동",
+                brdtitle:"게시판 제목",
+                brdmemo:"게시물 내용",
+                brddate: Date.now()
+            };
+            
+            var updates = {};
+            updates['/board/' + newPostKey] = postData;
+            
+            
+            database.ref().update(updates);
+            

@@ -1,0 +1,36 @@
+{
+  "name": "cf-default-app-nodejs",
+  "version": "0.1.0",
+  "description": "The default Node.js App for the Swisscom Application Cloud",
+  "keywords": [
+    "cloud foundry",
+    "express",
+    "swisscom application cloud"
+  ],
+  "author": "Tobias Fuhrimann <tobias.fuhrimann@swisscom.com>",
+  "private": true,
+  "scripts": {
+    "start": "node src",
+    "lint": "eslint src --fix",
+    "pretest": "npm run lint",
+    "test": "echo \"No tests configured\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "firebase": "^8.2.9",
+    "firebase-admin": "^9.5.0",
+    "firebase-functions": "^3.13.1",
+    "pug": "^2.0.3"
+  },
+  "license": "Apache 2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:swisscom/cf-default-app-nodejs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/swisscom/cf-default-app-nodejs/issues"
+  },
+  "engines": {
+    "node": ">=10"
+  }
+}

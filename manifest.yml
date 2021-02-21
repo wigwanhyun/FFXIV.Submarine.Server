@@ -1,0 +1,6 @@
+---
+applications:
+- name: default-app-nodejs
+  memory: 64M
+  buildpacks: 
+  - nodejs_buildpack
