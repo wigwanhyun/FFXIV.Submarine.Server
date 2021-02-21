@@ -45,7 +45,7 @@ app.all('/*', function(req, res, next) {
 
 app.get("/getList", (req, res) => {
     var database   = firebase.database();
-    database.ref('board').once('value')
+    database.ref('/').once('value')
     .then(function(snapshot) {
         var sJson = JSON.stringify(snapshot.val());
         var oJson = JSON.parse(sJson);
@@ -55,7 +55,7 @@ app.get("/getList", (req, res) => {
         var dataSet = [];
         oKeys.forEach(element => {
             let oData = oJson[element];
-            dataSet.push([oData.brdtitle]);
+            dataSet.push([oData.Name, oData.Tear2Reward, oData.Tear3Reward]);
         })
         res.writeHead(200, {'Content-Type':'application/json'});
         res.end(JSON.stringify(dataSet));
