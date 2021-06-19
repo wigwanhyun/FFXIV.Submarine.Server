@@ -12,15 +12,19 @@ const functions = require('firebase-functions');
 
 const app = express();
 
+const bodyParser  = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 var firebaseConfig = {
-    apiKey: "AIzaSyDBl3p8u2LHEjcxlyPIEFqaIcGhgJN3-E8",
-    authDomain: "ffxiv-submarin.firebaseapp.com",
-    projectId: "ffxiv-submarin",
-    storageBucket: "ffxiv-submarin.appspot.com",
-    messagingSenderId: "858250318096",
-    appId: "1:858250318096:web:88a50a8325f459ba901595",
-    measurementId: "G-ME06WV8RSY"
+    apiKey: "AIzaSyCeCE4isza3dgdqU_MeOcuhvFJPrLgJdEw",
+    authDomain: "wiepuzzle.firebaseapp.com",
+    projectId: "wiepuzzle",
+    storageBucket: "wiepuzzle.appspot.com",
+    messagingSenderId: "59626688751",
+    appId: "1:59626688751:web:67d5fe96f7192b87520b1a",
+    measurementId: "G-675EPYC7CZ"
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -63,21 +67,31 @@ app.get("/getList", (req, res) => {
 });
 
 
-app.get("/testInput", (req, res) => {
+app.get("/share", (req, res) => {
+    let { s } = req.query;
+
     var database   = firebase.database();
-    var newPostKey = database.ref().child('posts').push().key;
+    database.ref('/share/' + s).once('value')
+    .then(function(snapshot) {
+        var sJson = JSON.stringify(snapshot.val());
+        var oJson = JSON.parse(sJson);
+        res.writeHead(200, {'Content-Type':'application/json'});
+        res.end(sJson);
+    })
+});
+
+app.post("/makeshare", (req, res) => {
+    let { id, puzzleParam } = req.body;
+  
+    var database   = firebase.database();
     
     var postData = {
-        brdno: newPostKey,
-        brdwriter:"홍길동",
-        brdtitle:"게시판 제목",
-        brdmemo:"게시물 내용",
-        brddate: Date.now()
+        id: id,
+        puzzleParam: puzzleParam,
     };
     
     var updates = {};
-    updates['/board/' + newPostKey] = p
-    ostData;
+    updates['/share/' + id] = postData;
     
     
     database.ref().update(updates);
