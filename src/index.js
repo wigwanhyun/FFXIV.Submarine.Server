@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "https://puzzle.girin.dev");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
   });
@@ -82,7 +82,8 @@ app.get("/share", (req, res) => {
 
 app.post("/makeshare", (req, res) => {
     let { id, puzzleParam } = req.body;
-  
+    console.log(id)
+    console.log(req)
     var database   = firebase.database();
     
     var postData = {
