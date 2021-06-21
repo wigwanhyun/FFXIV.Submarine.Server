@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({limit: '50mb'})); 
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-
+  
 var firebaseConfig = {
     apiKey: "AIzaSyCeCE4isza3dgdqU_MeOcuhvFJPrLgJdEw",
     authDomain: "wiepuzzle.firebaseapp.com",
