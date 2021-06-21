@@ -96,7 +96,7 @@ app.post("/makeshare", (req, res) => {
     
     database.ref().update(updates);
 
-    res.end();
+    res.end("success");
 });
 
 
