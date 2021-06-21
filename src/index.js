@@ -19,10 +19,6 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 
-
-출처: https://beagle-dev.tistory.com/229 [언젠간 되어있겠지]
-
-출처: https://beagle-dev.tistory.com/229 [언젠간 되어있겠지]
 var firebaseConfig = {
     apiKey: "AIzaSyCeCE4isza3dgdqU_MeOcuhvFJPrLgJdEw",
     authDomain: "wiepuzzle.firebaseapp.com",
