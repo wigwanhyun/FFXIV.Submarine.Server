@@ -16,6 +16,7 @@ const bodyParser  = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true})); //url의 크기 설정
 
 var firebaseConfig = {
     apiKey: "AIzaSyCeCE4isza3dgdqU_MeOcuhvFJPrLgJdEw",
