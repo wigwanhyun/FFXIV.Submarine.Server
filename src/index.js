@@ -3,13 +3,15 @@
 const http = require("http");
 const path = require("path");
 const express = require("express");
+const CryptoJS = require("crypto-js");
 
 var firebase = require("firebase/app");
 require("firebase/auth");
 require("firebase/firestore");
 require("firebase/database");
-const functions = require('firebase-functions');
 
+const functions = require('firebase-functions');
+const aesKey = '0000000000@fsadqega#fkdlsaiqu1235' // 32자리 키 
 const app = express();
 
 const bodyParser  = require('body-parser');
@@ -45,29 +47,30 @@ app.get("/", (req, res) => {
 
 app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "https://puzzle.girin.dev");
+    //res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
     res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
     res.header('Access-Control-Allow-Credentials', 'true'); 
     next();
   });
 
-app.get("/getList", (req, res) => {
-    var database   = firebase.database();
-    database.ref('/').orderByChild("Name").once('value')
-    .then(function(snapshot) {
-        var sJson = JSON.stringify(snapshot.val());
-        var oJson = JSON.parse(sJson);
+// app.get("/getList", (req, res) => {
+//     var database   = firebase.database();
+//     database.ref('/').orderByChild("Name").once('value')
+//     .then(function(snapshot) {
+//         var sJson = JSON.stringify(snapshot.val());
+//         var oJson = JSON.parse(sJson);
 
-        var oKeys = Object.keys(oJson);
+//         var oKeys = Object.keys(oJson);
 
-        var dataSet = [];
-        oKeys.forEach(element => {
-            let oData = oJson[element];
-            dataSet.push([oData.Name, oData.Tear1Reward, oData.Tear2Reward, oData.Tear3Reward]);
-        })
-        res.writeHead(200, {'Content-Type':'application/json'});
-        res.end(JSON.stringify(dataSet));
-    })
-});
+//         var dataSet = [];
+//         oKeys.forEach(element => {
+//             let oData = oJson[element];
+//             dataSet.push([oData.Name, oData.Tear1Reward, oData.Tear2Reward, oData.Tear3Reward]);
+//         })
+//         res.writeHead(200, {'Content-Type':'application/json'});
+//         res.end(JSON.stringify(dataSet));
+//     })
+// });
 
 
 app.get("/share", (req, res) => {
@@ -77,32 +80,70 @@ app.get("/share", (req, res) => {
     database.ref('/share/' + s).once('value')
     .then(function(snapshot) {
         var sJson = JSON.stringify(snapshot.val());
-        var oJson = JSON.parse(sJson);
+        //var oJson = JSON.parse(sJson);
         res.writeHead(200, {'Content-Type':'application/json'});
         res.end(sJson);
     })
 });
 
 app.post("/makeshare", (req, res) => {
-    let { id, puzzleParam } = req.body;
-    console.log(id)
-    console.log(req)
-    var database   = firebase.database();
-    
+    let { puzzleParam } = req.body;
+    let database   = firebase.database();
+    let puzzleId = encrypt(getCurrentDate());
+    let replaceEncId = puzzleId.replace(/\+/gi,'xMl3Jk').replace(/\//gi,'Por21Ld').replace(/=/gi,'Ml32');
     var postData = {
-        id: id,
+        id: replaceEncId,
         puzzleParam: puzzleParam,
     };
     
     var updates = {};
-    updates['/share/' + id] = postData;
+    updates['/share/' + replaceEncId] = postData;
     
     
     database.ref().update(updates);
 
-    res.end("success");
+    res.end(JSON.stringify({
+        "shareID" : replaceEncId
+    }));
+
+
 });
 
+
+function encrypt (plainText) 
+{ 
+    let key = CryptoJS.enc.Utf8.parse(aesKey); 
+    let iv = CryptoJS.enc.Hex.parse("0000000000000000"); 
+    let encrypt = CryptoJS.AES.encrypt(plainText, key, {iv:iv}); 
+    return encrypt.toString();
+}; 
+
+
+function getCurrentDate()
+{
+    var date = new Date();
+    var year = date.getFullYear().toString();
+
+    var month = date.getMonth() + 1;
+    month = month < 10 ? '0' + month.toString() : month.toString();
+
+    var day = date.getDate();
+    day = day < 10 ? '0' + day.toString() : day.toString();
+
+    var hour = date.getHours();
+    hour = hour < 10 ? '0' + hour.toString() : hour.toString();
+
+    var minites = date.getMinutes();
+    minites = minites < 10 ? '0' + minites.toString() : minites.toString();
+
+    var seconds = date.getSeconds();
+    seconds = seconds < 10 ? '0' + seconds.toString() : seconds.toString();
+
+    var miliSeconds = date.getMilliseconds();
+    
+
+    return year + month + day + hour + minites + seconds + "" + miliSeconds;
+}
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 
